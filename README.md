@@ -25,6 +25,8 @@ I'd like to create it so it is realtime. Meaning each run will look different. T
 Before running this install the following libs:
 
 - geomerative
+- Shapes3D
+- g4p
 
 (list will grow)
 
@@ -44,4 +46,6 @@ Wouldn't it be cool if this program automagically retrieved a video clip for the
 
 Different brands of music (metal) call for different kinds of background and colors. So yeah. Might implement that.
 
+- Shape definition
 
+Since Shape3D supports some kind of Shape editor, i might use that and create something that allows the user to create his/her own shapes and sync them to parts of the song. Tricky but possible i think. 
