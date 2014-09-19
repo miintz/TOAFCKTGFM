@@ -19,6 +19,29 @@ The program will include a synchronization tool to sync lyrics via keyboard. Tha
 
 I'd like to create it so it is realtime. Meaning each run will look different. This could potentially fail horribly, because i dont know about the capabilities of Processing. Maybe this is all a bit too much. If it doesn't work, i will probably create a renderer that outputs movie files. 
 
-Ok that's it. I'm going to attempt it now. 
 
- 
+**IMPORTANT**
+
+Before running this install the following libs:
+
+- geomerative
+
+(list will grow)
+
+Also, i'm not liable for anything. If you think the final product is amazing and you go a bit wild and, i don't know, manage to mash up your deck and in progress demolish your favorite CD (limited edition) of your favorite band than well, i feel for you, but can't help you. 
+
+
+Ok that's the formal stuff out of the way. I'm going to have a go now. 
+<br/><br/>
+<br/><br/>
+If you are still with me at this point, here are some features i may implement in the future: 
+
+- Support for video clips
+
+Wouldn't it be cool if this program automagically retrieved a video clip for the render? 
+
+- Customizable dynamic backgrounds and color palettes
+
+Different brands of music (metal) call for different kinds of background and colors. So yeah. Might implement that.
+
+
