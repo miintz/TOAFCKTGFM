@@ -147,13 +147,16 @@ void draw()
   {
     //draw buttons
     fill(#FFFFFF);
-    rect(200.0,200.0,200.0,100.0);
-    rect(200.0,400.0,200.0,100.0);
+    
+    rect(200.0,200.0,300.0,100.0);
+    rect(200.0,400.0,300.0,100.0);
+    rect(200.0,600.0,300.0,100.0);
  
     textSize(32);
     fill(0, 102, 153);
-    text("Sync it!", 10, 30); 
-    text("Player it! \\m/", 10, 60);      
+    text("Synchronize it!", 220, 250); 
+    text("Play it! \\m/", 220, 450);
+    text("Exit :-(", 220, 650);    
   }  
   
   if(MODE == "SYNC")
@@ -164,6 +167,29 @@ void draw()
   if(MODE == "PLAY")
   {
     head.draw();
+  }
+}
+
+void mouseClicked()
+{
+  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY >200.0)
+  {
+    //sync button
+    println("sync button");
+  }
+  
+  
+  if((mouseX < 700.0 && mouseX > 400.0) && mouseY < 300.0 && mouseY >200.0)
+  {
+    //sync button
+    println("sync button");
+  }
+  
+  
+  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY >200.0)
+  {
+    //sync button
+    println("sync button");
   }
 }
 
