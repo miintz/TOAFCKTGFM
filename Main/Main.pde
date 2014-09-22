@@ -28,10 +28,16 @@ public static final String SONG = "omerta.mp3"; //make this configurable somehow
 
 RShape CURRENT;
 
+Player head;
+Syncer syncer;
+
+public String MODE;
+
 //het gaat vanuit een woordenlijst
 //woord => tijd. zoiets:
 
-ArrayList<Object[]> words = new ArrayList<Object[]>();
+ArrayList<ArrayList<String[]>> SyncData = new ArrayList<ArrayList<String[]>>();
+ArrayList<String[]> words = new ArrayList<String[]>();
 
 void setup()
 {
@@ -42,12 +48,13 @@ void setup()
   RG.init(this);
   CURRENT = RG.getText("Hello world!", "FreeSans.ttf", 72, CENTER);
  
+  head = new Player();
+  syncer = new Syncer();
+ 
   minim = new Minim(this); 
   //load song! \m/ 
   player = minim.loadFile("res/music/" + SONG);
  
- 
-   
   //add some words
   String[] word = new String[2];
   word[0] = "Whoever";
@@ -135,11 +142,47 @@ Object[] nextWord;
 
 void draw()
 { 
+  //draw menu
+  if(MODE == null)
+  {
+    //draw buttons
+    fill(#FFFFFF);
+    rect(200.0,200.0,200.0,100.0);
+    rect(200.0,400.0,200.0,100.0);
+ 
+    textSize(32);
+    fill(0, 102, 153);
+    text("Sync it!", 10, 30); 
+    text("Player it! \\m/", 10, 60);      
+  }  
+  
+  if(MODE == "SYNC")
+  {
+    syncer.draw();
+  }
+  
+  if(MODE == "PLAY")
+  {
+    head.draw();
+  }
+}
+
+void keyPressed()
+{
+        
+}
+
+public class Player
+{
+  Player()
+  {
+    
+  }
+  
+  public void draw()
+  {
     translate(width / 2, height / 2);
     
-    //realtime of render?
-    //laad muziek en afspelen?
-    //hoe de fok ga je dit uberhaupt doen?
     if(TIMER_RUNNING)
     {               
         TIMER += 0.25; // 30.0 / FRAMERATE     
@@ -153,39 +196,30 @@ void draw()
           
           println("setting first word: '" + nextWord[0] + "'");          
         }        
-        
-        //de timing is mogelijk niet af te stemmen op de framerate. dus moet een estimation maken... kan de sync verknoeien
-        //dus ik heb een tijd van het woord en de huidige tijd. die komen niet overeen, maar kan kijken of het dichterbij kan komen, zo niet, weergeven
+    
         float nextTime = Float.valueOf(nextWord[1].toString()).floatValue(); //lol
        
-        //prevTime is de tijd van het woord
-        //nu moet ik kijken of REAL_TIME daar dicht genoeg bij zit, hoe doe ik dat?
-        
-        //als ik prevTime van REAL_TIME (groter getal) af haal hou ik een getal over, als dat getal modulo framerate kleiner is dan 120 / 30 = 4 kan het niet dichterbij komen
-        //of ik zorg er gewoon voor dat alles afgerond in de array gaat...
-        
-      
         CURRENT.draw();        
         
         if(REAL_TIME == nextTime) 
-        { 
+        {   
+          CURRENT = RG.getText(String.valueOf(nextWord[0]), "FreeSans.ttf", 72, CENTER);
+          
           //nu gebruik ik dit om de text te clearen, moet anders... 
-          //background(#D5A500);
+          background(#D5A500);
           
           //deze 3 regels staan nu in keyPressed... maar moet apart van de sync komen natuurlijk
-          //wordIndex++;
+          wordIndex++;
           
-          //prevWord = words.get(wordIndex - 1);
-          //nextWord = words.get(wordIndex);                  
+          prevWord = words.get(wordIndex - 1);
+          nextWord = words.get(wordIndex);            
         }       
-    }      
-}
-
-void keyPressed()
-{
-    char k = key;
-    
-    switch(k)
+    }   
+  }
+  
+  public void keyPressed()
+  {
+    switch(key)
     {
       case ' ': //spacebar, start song
         println("\r\n");
@@ -207,6 +241,27 @@ void keyPressed()
         
         player.play();
       break;
+    }
+  }
+  
+}
+
+public class Syncer
+{
+  Syncer()
+  {
+    //
+  }
+  
+  public void draw()
+  {
+    
+  }
+  
+  public void syncKeyPressed()
+  {
+    switch(key)
+    {
       case 'v': //sync
           if(MUSIC_PLAYING)
           {
@@ -239,7 +294,27 @@ void keyPressed()
             }
           }
       break;
-    }    
+      
+      case '0': //E snaar 0 fret
+        println(" == 0 == E snaar fret 0");
+      break; 
+      
+      case '3':
+        print(" == 3 == E snaar fret 3");
+      break;
+      
+      case '5':
+        println(" == 5 == E snaar fret 5");
+      break;
+      
+      case '7':
+        println(" == 9 == E snaar fret 9");
+      break;
+      
+      case '9':
+      break;
+    }
+  }
 }
 
 
