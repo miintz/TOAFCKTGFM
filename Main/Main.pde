@@ -145,7 +145,7 @@ void draw()
   //draw menu
   if(MODE == null)
   {
-    //draw buttons
+    //draw buttons for program control
     fill(#FFFFFF);
     
     rect(200.0,200.0,300.0,100.0);
@@ -179,17 +179,17 @@ void mouseClicked()
   }
   
   
-  if((mouseX < 700.0 && mouseX > 400.0) && mouseY < 300.0 && mouseY >200.0)
+  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 500.0 && mouseY > 400.0)
   {
     //sync button
-    println("sync button");
+    println("play button");
   }
   
   
-  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY >200.0)
+  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 700.0 && mouseY > 600.0)
   {
     //sync button
-    println("sync button");
+    println("exit :-( button");
   }
 }
 
