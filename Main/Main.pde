@@ -145,7 +145,7 @@ void draw()
   //draw menu
   if(MODE == null)
   {
-    //draw buttons
+    //draw buttons for program control
     fill(#FFFFFF);
     
     rect(200.0,200.0,300.0,100.0);
@@ -183,7 +183,6 @@ void mouseClicked()
   
   if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 500.0 && mouseY > 400.0)
   {
-    //play button
     println("play button");
   }
   
