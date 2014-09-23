@@ -172,24 +172,27 @@ void draw()
 
 void mouseClicked()
 {
-  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY >200.0)
+  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY > 200.0)
   {
     //sync button
     println("sync button");
+    MODE = "SYNC";
+    background(#dddddd);
   }
   
   
-  if((mouseX < 700.0 && mouseX > 400.0) && mouseY < 300.0 && mouseY >200.0)
+  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 500.0 && mouseY > 400.0)
   {
-    //sync button
-    println("sync button");
+    //play button
+    println("play button");
   }
   
   
-  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY >200.0)
+  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 700.0 && mouseY > 600.0)
   {
-    //sync button
-    println("sync button");
+    //exit button
+    println("bye bye :(");
+    exit();
   }
 }
 
@@ -272,6 +275,7 @@ public class Player
   
 }
 
+String SYNC_MODE = "intro"; 
 public class Syncer
 {
   Syncer()
@@ -281,7 +285,11 @@ public class Syncer
   
   public void draw()
   {
-    
+    //first display a welcoming message
+    if(SYNC_MODE == "intro")
+    {
+      text(  
+    }
   }
   
   public void syncKeyPressed()
