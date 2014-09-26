@@ -33,108 +33,26 @@ Syncer syncer;
 
 public String MODE;
 
-//het gaat vanuit een woordenlijst
-//woord => tijd. zoiets:
+ArrayList<Object[]> SyncData = new ArrayList<Object[]>();
 
-ArrayList<ArrayList<String[]>> SyncData = new ArrayList<ArrayList<String[]>>();
-ArrayList<String[]> words = new ArrayList<String[]>();
+String SYNC_MODE = "intro";
+String SYNC_INST = ""; 
 
 void setup()
 {
   //constructor, basic setup
   frameRate(FRAMERATE); //makkelijker rekenen, 60 / 2 = 30 of 120 / 4 = 30  
   size(1000, 1000);  
- 
+
   RG.init(this);
   CURRENT = RG.getText("Hello world!", "FreeSans.ttf", 72, CENTER);
- 
+
   head = new Player();
   syncer = new Syncer();
- 
+
   minim = new Minim(this); 
   //load song! \m/ 
   player = minim.loadFile("res/music/" + SONG);
- 
-  //add some words
-  String[] word = new String[2];
-  word[0] = "Whoever";
-  word[1] = "1.00";   
-  words.add(word); 
-  
-  word = new String[2];
-  word[0] = "appeals";
-  word[1] = "1.50";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "to";
-  word[1] = "2.00";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "the";
-  word[1] = "2.50";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "laws";
-  word[1] = "3.00";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "against";
-  word[1] = "3.50";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "his";
-  word[1] = "4.00";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "fellow";
-  word[1] = "4.50";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "man";
-  word[1] = "5.00";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "is";
-  word[1] = "5.50";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "either";
-  word[1] = "6.00";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "a";
-  word[1] = "6.50";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "fool";
-  word[1] = "7.00";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "or";
-  word[1] = "7.50";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "a";
-  word[1] = "8.00";   
-  words.add(word);
-  
-  word = new String[2];
-  word[0] = "coward";
-  word[1] = "8.50";   
-  words.add(word);
 }
 
 Object[] prevWord;
@@ -143,28 +61,29 @@ Object[] nextWord;
 void draw()
 { 
   //draw menu
-  if(MODE == null)
+  if (MODE == null)
   {
     //draw buttons for program control
     fill(#FFFFFF);
-    
-    rect(200.0,200.0,300.0,100.0);
-    rect(200.0,400.0,300.0,100.0);
-    rect(200.0,600.0,300.0,100.0);
- 
+
+    rect(200.0, 200.0, 300.0, 100.0);
+    rect(200.0, 400.0, 300.0, 100.0);
+    rect(200.0, 600.0, 300.0, 100.0);
+
     textSize(32);
     fill(0, 102, 153);
+    
     text("Synchronize it!", 220, 250); 
-    text("Play it! \\m/", 220, 450);
-    text("Exit :-(", 220, 650);    
+    text("Play it!", 220, 450);
+    text("Exit :-(", 220, 650);
   }  
-  
-  if(MODE == "SYNC")
+
+  if (MODE == "sync")
   {
     syncer.draw();
   }
-  
-  if(MODE == "PLAY")
+
+  if (MODE == "play")
   {
     head.draw();
   }
@@ -172,182 +91,221 @@ void draw()
 
 void mouseClicked()
 {
-  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY > 200.0)
+  if (MODE == null)
   {
-    //sync button
-    println("sync button");
-    MODE = "SYNC";
-    background(#dddddd);
-  }
-  
-  
-  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 500.0 && mouseY > 400.0)
+    if ((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY > 200.0)
+    {
+      //sync button
+      println("sync button");
+      MODE = "sync";
+      SYNC_MODE = "intro";
+      background(#dddddd);
+    }
+
+
+    if ((mouseX < 500.0 && mouseX > 200.0) && mouseY < 500.0 && mouseY > 400.0)
+    {
+      MODE = "play";
+      println("play button");
+    }
+
+
+    if ((mouseX < 500.0 && mouseX > 200.0) && mouseY < 700.0 && mouseY > 600.0)
+    {
+      //exit button      
+      println("bye bye :(");
+      exit();
+    }
+  } else if (MODE == "sync")
   {
-    println("play button");
-  }
-  
-  
-  if((mouseX < 500.0 && mouseX > 200.0) && mouseY < 700.0 && mouseY > 600.0)
-  {
-    //exit button
-    println("bye bye :(");
-    exit();
+    syncer.mouseClicked();
   }
 }
 
 void keyPressed()
 {
-        
+  println("Key pressed " + MODE + "  " + SYNC_MODE);
+  if(MODE == "sync")
+  {
+    if(SYNC_MODE == "syncing")
+    {
+      syncer.syncKeyPressed();
+    }  
+  }
 }
 
 public class Player
 {
   Player()
   {
-    
   }
-  
+
   public void draw()
   {
     translate(width / 2, height / 2);
-    
-    if(TIMER_RUNNING)
-    {               
-        TIMER += 0.25; // 30.0 / FRAMERATE     
-        REAL_TIME = TIMER / 30.0; //this is the actual seconds i think, depends on framerate and the gods of metal
-        
-        //start looping the array;
-        if(nextWord == null)
-        {
-          nextWord = words.get(wordIndex);
-          prevWord = words.get(wordIndex);
-          
-          println("setting first word: '" + nextWord[0] + "'");          
-        }        
-    
-        float nextTime = Float.valueOf(nextWord[1].toString()).floatValue(); //lol
-       
-        CURRENT.draw();        
-        
-        if(REAL_TIME == nextTime) 
-        {   
-          CURRENT = RG.getText(String.valueOf(nextWord[0]), "FreeSans.ttf", 72, CENTER);
-          
-          //nu gebruik ik dit om de text te clearen, moet anders... 
-          background(#D5A500);
-          
-          //deze 3 regels staan nu in keyPressed... maar moet apart van de sync komen natuurlijk
-          wordIndex++;
-          
-          prevWord = words.get(wordIndex - 1);
-          nextWord = words.get(wordIndex);            
-        }       
-    }   
+
+    //    if (TIMER_RUNNING)
+    //    {               
+    //      TIMER += 0.25; // 30.0 / FRAMERATE     
+    //      REAL_TIME = TIMER / 30.0; //this is the actual seconds i think, depends on framerate and the gods of metal
+    //      
+    //      //float nextTime = Float.valueOf(nextWord[1].toString()).floatValue(); //lol
+    //
+    //      //CURRENT.draw();        
+    //
+    //      if (REAL_TIME == nextTime) 
+    //      {   
+    //        CURRENT = RG.getText(String.valueOf(nextWord[0]), "FreeSans.ttf", 72, CENTER);
+    //
+    //        //nu gebruik ik dit om de text te clearen, moet anders... 
+    //        background(#D5A500);
+    //
+    //        //deze 3 regels staan nu in keyPressed... maar moet apart van de sync komen natuurlijk
+    //       // wordIndex++;
+    //
+    //        prevWord = words.get(wordIndex - 1);
+    //        nextWord = words.get(wordIndex);
+    //      }
+    //    }
   }
-  
+
   public void keyPressed()
   {
     switch(key)
     {
-      case ' ': //spacebar, start song
-        println("\r\n");
-        println("\r\n");
-        
-        println("== \\m/(-.-)\\m/ ==");
-        println("== PLAYING: " + SONG + " ==");
-        println("== \\m/(-.-)\\m/ ==");
-        
-        println("\r\n");
-        println("\r\n");
-                
-        TIMER_RUNNING = true;
-        MUSIC_PLAYING = true;
-        
-        wordIndex = 0;
-        prevWord = null;
-        nextWord = null;
-        
-        player.play();
+    case ' ': //spacebar, start song
+      println("\r\n");
+      println("\r\n");
+
+      println("== \\m/(-.-)\\m/ ==");
+      println("== PLAYING: " + SONG + " ==");
+      println("== \\m/(-.-)\\m/ ==");
+
+      println("\r\n");
+      println("\r\n");
+
+      TIMER_RUNNING = true;
+      MUSIC_PLAYING = true;
+
+      wordIndex = 0;
+      prevWord = null;
+      nextWord = null;
+
+      player.play();
       break;
     }
   }
-  
 }
 
-String SYNC_MODE = "intro"; 
 public class Syncer
 {
   Syncer()
   {
-    //
   }
-  
+
   public void draw()
   {
-    //first display a welcoming message
-    if(SYNC_MODE == "intro")
+    if (SYNC_MODE == "intro")
     {
-      text(  
+      background(#FFFFFF);
+
+      textSize(14);
+
+      text("Select instrument or something:", 100, 50);
+
+      textSize(16);
+
+      text("Lyics", 100, 200);
+      text("Guitar", 100, 300);
+      text("Drums", 100, 400);
+      text("Other", 100, 500);      
+
+      textSize(14);
+    }
+    if (SYNC_MODE == "syncing")
+    {
+      background(#FFFFFF);
+
+      textSize(14);
+  
+      text("Press the keys you wish to use for " + SYNC_INST, 100, 50);
+            
+      for (int i = 0; i < SyncData.size(); i++) //dit werkt niet met toevoegen van de toetsen, moet in deze loop gebeuren ipv de loop inb keypressed
+      {
+        Object[] insdata = SyncData.get(i);
+        if (insdata[0] == SYNC_INST)
+        {          
+          ArrayList<String> insync = (ArrayList<String>)insdata[1];
+          for(int o = 0; o < insync.size(); i++)
+          {
+            text(insync.get(o), 100, 150 + (o * 50));
+          }
+        }       
+      }
     }
   }
-  
+
+  public void mouseClicked()
+  {
+    if (SYNC_MODE == "intro")
+    {
+      float x = mouseX;
+      float y = mouseY;      
+
+      if ((x > 100 && x < 200) && (y > 175 && y < 200))
+        SYNC_INST = "lyrics";  
+      if ((x > 100 && x < 200) && (y > 275 && y < 300))
+        SYNC_INST = "guitar";
+      if ((x > 100 && x < 200) && (y > 375 && y < 400))
+        SYNC_INST = "drums";
+      if ((x > 100 && x < 200) && (y > 475 && y < 500))
+        SYNC_INST = "other";
+
+      //maak een lijst voor het gekozen instrument 
+      Object[] insdata = new Object[2];
+      insdata[0] = SYNC_INST;
+      insdata[1] = new ArrayList<String>();            
+      
+      SyncData.add(insdata);
+      
+      SYNC_MODE = "syncing";
+    } 
+    else if (SYNC_MODE == "syncing")
+    {
+      //hier iets?
+    }
+  }
+
   public void syncKeyPressed()
   {
-    switch(key)
+    if (SYNC_MODE == "syncing")
     {
-      case 'v': //sync
-          if(MUSIC_PLAYING)
-          {
-            if(wordIndex != words.size())
-            {
-              println(nextWord[0] + " : " + REAL_TIME);            
-                 
-              if(wordIndex != 0)         
-                prevWord = words.get(wordIndex - 1);
-                
-              nextWord = words.get(wordIndex);    
-              
-              wordIndex++;
-               
-              CURRENT = RG.getText(String.valueOf(nextWord[0]), "FreeSans.ttf", 72, CENTER);  
-              background(#D5A500);   
-            }
-            else //end of word list, restart for now
-            {
-              minim.stop();
-              minim = new Minim(this); 
-              //load song! \m/ 
-              player = minim.loadFile("res/music/" + SONG);
-              
-              TIMER_RUNNING = false;
-              MUSIC_PLAYING = false;
-              
-              TIMER = 0.0;
-              REAL_TIME = 0.0;
-            }
-          }
-      break;
+      //moet ik eerst de juiste lijst zien te vinden
+      Object[] insdata = null;
+      int i = 0;       
       
-      case '0': //E snaar 0 fret
-        println(" == 0 == E snaar fret 0");
-      break; 
+      for (i = 0; i < SyncData.size (); i ++)
+      {
+        insdata = SyncData.get(i);
+        
+        if (insdata[0] == SYNC_INST) {
+          break;       
+        }
+      }
       
-      case '3':
-        print(" == 3 == E snaar fret 3");
-      break;
+      //voeg keyCode of key toe?
+      ArrayList<String> insync = (ArrayList<String>)insdata[1];
       
-      case '5':
-        println(" == 5 == E snaar fret 5");
-      break;
+      insync.add(Character.toString(key));
+      insdata[1] = insync;
       
-      case '7':
-        println(" == 9 == E snaar fret 9");
-      break;
+      SyncData.remove(i);      
+      SyncData.add(insdata);      
       
-      case '9':
-      break;
+      println("size: " + insync.size());
     }
+    
+    println("Hier?");
   }
 }
-
 
