@@ -23,6 +23,8 @@ int wordIndex = 0;
 boolean TIMER_RUNNING = false;
 boolean MUSIC_PLAYING = false;
 
+boolean DRAWING = false;
+
 public static final int FRAMERATE = 120;
 public static final String SONG = "omerta.mp3"; //make this configurable somehow \m/
 
@@ -30,6 +32,7 @@ RShape CURRENT;
 
 Player head;
 Syncer syncer;
+Util util;
 
 public String MODE;
 
@@ -49,6 +52,7 @@ void setup()
 
   head = new Player();
   syncer = new Syncer();
+  util = new Util();
 
   minim = new Minim(this); 
   //load song! \m/ 
@@ -72,7 +76,7 @@ void draw()
 
     textSize(32);
     fill(0, 102, 153);
-    
+
     text("Synchronize it!", 220, 250); 
     text("Play it!", 220, 450);
     text("Exit :-(", 220, 650);
@@ -96,7 +100,7 @@ void mouseClicked()
     if ((mouseX < 500.0 && mouseX > 200.0) && mouseY < 300.0 && mouseY > 200.0)
     {
       //sync button
-      println("sync button");
+      
       MODE = "sync";
       SYNC_MODE = "intro";
       background(#dddddd);
@@ -124,13 +128,12 @@ void mouseClicked()
 
 void keyPressed()
 {
-  println("Key pressed " + MODE + "  " + SYNC_MODE);
-  if(MODE == "sync")
+  if (MODE == "sync")
   {
-    if(SYNC_MODE == "syncing")
+    if (SYNC_MODE == "syncing")
     {
       syncer.syncKeyPressed();
-    }  
+    }
   }
 }
 
@@ -199,8 +202,10 @@ public class Player
 
 public class Syncer
 {
+  Util util = null;
   Syncer()
   {
+    util = new Util();
   }
 
   public void draw()
@@ -227,20 +232,23 @@ public class Syncer
       background(#FFFFFF);
 
       textSize(14);
-  
+
       text("Press the keys you wish to use for " + SYNC_INST, 100, 50);
-            
-      for (int i = 0; i < SyncData.size(); i++) //dit werkt niet met toevoegen van de toetsen, moet in deze loop gebeuren ipv de loop inb keypressed
+
+      for (int i = 0; i < SyncData.size (); i++) 
       {
         Object[] insdata = SyncData.get(i);
+
         if (insdata[0] == SYNC_INST)
-        {          
+        {                      
           ArrayList<String> insync = (ArrayList<String>)insdata[1];
-          for(int o = 0; o < insync.size(); i++)
+
+          for (int o = 0; o < insync.size (); o++)
           {
+            textSize(16);
             text(insync.get(o), 100, 150 + (o * 50));
           }
-        }       
+        }
       }
     }
   }
@@ -265,9 +273,9 @@ public class Syncer
       Object[] insdata = new Object[2];
       insdata[0] = SYNC_INST;
       insdata[1] = new ArrayList<String>();            
-      
+
       SyncData.add(insdata);
-      
+
       SYNC_MODE = "syncing";
     } 
     else if (SYNC_MODE == "syncing")
@@ -283,29 +291,65 @@ public class Syncer
       //moet ik eerst de juiste lijst zien te vinden
       Object[] insdata = null;
       int i = 0;       
-      
+
       for (i = 0; i < SyncData.size (); i ++)
       {
         insdata = SyncData.get(i);
-        
+
         if (insdata[0] == SYNC_INST) {
-          break;       
+          break;
         }
       }
       
       //voeg keyCode of key toe?
       ArrayList<String> insync = (ArrayList<String>)insdata[1];
-      
-      insync.add(Character.toString(key));
-      insdata[1] = insync;
-      
-      SyncData.remove(i);      
-      SyncData.add(insdata);      
-      
-      println("size: " + insync.size());
+      if(!util.in_str_list(Character.toString(key), insync))
+      {
+        insync.add(Character.toString(key));
+        insdata[1] = insync;
+        
+        SyncData.remove(i);      
+        SyncData.add(insdata);
+      }
+    }
+  }
+} 
+
+public class Util
+{
+  Util(){}
+  
+  //generics plz :-(
+  public boolean in_str_list(String value, ArrayList<String> list)
+  {
+    //check array 
+    for(int i = 0; i < list.size(); i++)
+    {
+      //blijkbaar kan == niet bij strings, gare taal
+      String aa = list.get(i);           
+      if(aa.equals(value))
+      {
+        return true;
+      }  
     }
     
-    println("Hier?");
+    return false;
   }
+  
+  boolean in_str_array(String value, String[] array)
+  {
+    //check array 
+    for(int i = 0; i < array.length; i++)
+    {
+      if(array[i].equals(value))
+      {
+        return true;
+      }  
+    }
+    
+    return false;
+  }
+  
+  
 }
 
